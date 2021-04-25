@@ -5,9 +5,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.hibernate.cache.spi.CacheDataDescription;
-import org.omg.CORBA.PRIVATE_MEMBER;
-
 import models.Employee;
 import utils.DBUtil;
 
@@ -72,6 +69,6 @@ public class EmployeeValidator {
         }
         return "";
     }
-
+}
 
 
