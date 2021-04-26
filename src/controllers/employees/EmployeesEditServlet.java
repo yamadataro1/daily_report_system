@@ -32,14 +32,14 @@ public class EmployeesEditServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         EntityManager em = DBUtil.createEntityManager();
 
-        Employee e = em.find(Employee.class , Integer.parseInt(request.getParameter("id")));
+        Employee e = em.find(Employee.class, Integer.parseInt(request.getParameter("id")));
+
         em.close();
 
-        request.setAttribute("employee" , e);
-        request.setAttribute("_token" , request.getSession().getId());
+        request.setAttribute("employee", e);
+        request.setAttribute("_token", request.getSession().getId());
         request.getSession().setAttribute("employee_id", e.getId());
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/employees/edit.jsp");

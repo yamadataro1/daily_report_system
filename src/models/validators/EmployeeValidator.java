@@ -1,4 +1,5 @@
-package validators;
+package models.validators;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,5 +71,3 @@ public class EmployeeValidator {
         return "";
     }
 }
-
-

@@ -13,9 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Employee;
+import models.validators.EmployeeValidator;
 import utils.DBUtil;
 import utils.EncryptUtil;
-import validators.EmployeeValidator;
+
 
 /**
  * Servlet implementation class EmployeesCreateServlet
