@@ -1,5 +1,6 @@
 package controllers.toppage;
 
+
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
@@ -21,7 +22,6 @@ public class TopPageIndexServlet extends HttpServlet {
      */
     public TopPageIndexServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     /**
