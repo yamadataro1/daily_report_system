@@ -10,6 +10,7 @@
     </head>
     <body>
         <div id="wrapper">
+        
             <div id="header">
                 <div id="header_menu">
                     <h1><a href="<c:url value='/' />">日報管理システム</a></h1>&nbsp;&nbsp;&nbsp;

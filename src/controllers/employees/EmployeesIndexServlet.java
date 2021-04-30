@@ -53,7 +53,7 @@ public class EmployeesIndexServlet extends HttpServlet {
         em.close();
 
 
-        //スコープjsp
+        //スコープ
 
         //テーブル
         request.setAttribute("employees", employees);
