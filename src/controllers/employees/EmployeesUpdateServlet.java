@@ -37,11 +37,12 @@ public class EmployeesUpdateServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         String _token = request.getParameter("_token");
         if(_token != null && _token.equals(request.getSession().getId())) {
             EntityManager em = DBUtil.createEntityManager();
 
-            Employee e = em.find(Employee.class, (Integer)(request.getSession().getAttribute("employee_id")));
+            Employee e=em.find(Employee.class , (Integer)(request.getSession().getAttribute("employee_id")));
 
             // 現在の値と異なる社員番号が入力されていたら
             // 重複チェックを行う指定をする
@@ -66,13 +67,12 @@ public class EmployeesUpdateServlet extends HttpServlet {
                                 )
                         );
             }
-
             e.setName(request.getParameter("name"));
             e.setAdmin_flag(Integer.parseInt(request.getParameter("admin_flag")));
             e.setUpdated_at(new Timestamp(System.currentTimeMillis()));
             e.setDelete_flag(0);
 
-            List<String> errors = EmployeeValidator.validate(e, codeDuplicateCheckFlag, passwordCheckFlag);
+            List<String> errors =EmployeeValidator.validate(e, codeDuplicateCheckFlag, passwordCheckFlag);
             if(errors.size() > 0) {
                 em.close();
 
