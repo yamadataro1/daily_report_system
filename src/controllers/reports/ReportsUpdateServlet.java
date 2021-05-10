@@ -1,5 +1,6 @@
 package controllers.reports;
 
+
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -29,47 +30,44 @@ public class ReportsUpdateServlet extends HttpServlet {
      */
     public ReportsUpdateServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String _token = request.getParameter("_token");
+        if(_token != null && _token.equals(request.getSession().getId())) {
+            EntityManager em = DBUtil.createEntityManager();
 
-       String _token = request.getParameter("_token");
-       if(_token != null && _token.equals(request.getSession().getId()));
+            Report r = em.find(Report.class, (Integer)(request.getSession().getAttribute("report_id")));
 
-       EntityManager em = DBUtil.createEntityManager();
+            r.setReport_date(Date.valueOf(request.getParameter("report_date")));
+            r.setTitle(request.getParameter("title"));
+            r.setContent(request.getParameter("content"));
+            r.setUpdated_at(new Timestamp(System.currentTimeMillis()));
 
-       Report r = em.find(Report.class, (Integer)(request.getSession().getAttribute("report_id")));
+            List<String> errors = ReportValidator.validate(r);
+            if(errors.size() > 0) {
+                em.close();
 
-       r.setReport_date(Date.valueOf(request.getParameter("report_date")));
-       r.setTitle(request.getParameter("title"));
-       r.setContent(request.getParameter("content"));
-       r.setUpdated_at(new Timestamp(System.currentTimeMillis()));
+                request.setAttribute("_token", request.getSession().getId());
+                request.setAttribute("report", r);
+                request.setAttribute("errors", errors);
 
-       List<String> errors = ReportValidator.validate(r);
-       if(errors.size() > 0) {
-           em.close();
+                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/reports/edit.jsp");
+                rd.forward(request, response);
+            } else {
+                em.getTransaction().begin();
+                em.getTransaction().commit();
+                em.close();
+                request.getSession().setAttribute("flush", "更新が完了しました。");
 
-           request.setAttribute("_token", request.getSession().getId());
-           request.setAttribute("report", r);
-           request.setAttribute("errors", errors);
+                request.getSession().removeAttribute("report_id");
 
-           RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/reports/edit.jsp");
-           rd.forward(request, response);
-
-       } else {
-           em.getTransaction().begin();
-           em.getTransaction().commit();
-           em.close();
-           request.getSession().setAttribute("flush", "更新が完了しました。");
-
-           request.getSession().removeAttribute("report_id");
-
-           response.sendRedirect(request.getContextPath() + "/reports/index");
+                response.sendRedirect(request.getContextPath() + "/reports/index");
+            }
+        }
     }
 
-}
 }

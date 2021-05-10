@@ -148,7 +148,11 @@ table#report_list .report_date {
 }
 
 table#report_list .report_title {
-    width: 37%;
+    width: 24%;
+}
+
+table#report_list .report_like_count {
+    width: 13%;
 }
 
 table#report_list .report_action {
@@ -162,3 +166,4 @@ pre {
 h3 {
     font-size: larger;
 }
+

@@ -35,12 +35,22 @@
                                 <fmt:formatDate value="${report.updated_at}" pattern="yyyy-MM-dd HH:mm:ss" />
                             </td>
                         </tr>
+                        <tr>
+                        <th>いいね数</th>
+                            <td><c:out value="${report.like_count}" /></td>
+                        </tr>
                     </tbody>
                 </table>
 
-                <c:if test="${sessionScope.login_employee.id == report.employee.id}">
+            <c:choose>
+                <c:when test="${sessionScope.login_employee.id == report.employee.id}">
                     <p><a href="<c:url value="/reports/edit?id=${report.id}" />">この日報を編集する</a></p>
-                </c:if>
+                </c:when>
+                <c:otherwise>
+                    <p><a href="<c:url value="/reports/like_count?id=${report.id}" />">この日報にいいねする</a></p>
+                </c:otherwise>
+            </c:choose>
+
             </c:when>
             <c:otherwise>
                 <h2>お探しのデータは見つかりませんでした。</h2>
