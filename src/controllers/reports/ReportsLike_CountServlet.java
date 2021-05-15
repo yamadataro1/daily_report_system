@@ -1,6 +1,7 @@
 package controllers.reports;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import models.Employee;
+import models.Like;
 import models.Report;
 import utils.DBUtil;
 
@@ -31,23 +34,31 @@ public class ReportsLike_CountServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        EntityManager em = DBUtil.createEntityManager();
 
-        Report r = em.find(Report.class, Integer.parseInt(request.getParameter("id")));
+            EntityManager em = DBUtil.createEntityManager();
 
+            Report r = em.find(Report.class, Integer.parseInt(request.getParameter("id")));
 
-        int count = r.getLike_count();
-        count++;
-        r.setLike_count(count);
+            Like l = new Like();
 
-        em.getTransaction().begin();
-        em.persist(r);
-        em.getTransaction().commit();
+            l.setEmployee((Employee)request.getSession().getAttribute("login_employee"));
+            l.setReport(r);
 
-        em.close();
+            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+            l.setLike_created_at(currentTime);
+            l.setLike_updated_at(currentTime);
 
-        request.getSession().setAttribute("flush","いいねしました");
-        response.sendRedirect(request.getContextPath() + "/reports/index");
+            int count = r.getLike_count();
+            count++;
+            r.setLike_count(count);
+
+            em.getTransaction().begin();
+            em.persist(r);
+            em.persist(l);
+            em.getTransaction().commit();
+            em.close();
+
+            request.getSession().setAttribute("flush","いいねしました");
+            response.sendRedirect(request.getContextPath() + "/reports/index");
     }
-
 }
